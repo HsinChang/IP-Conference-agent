@@ -4,6 +4,7 @@ Tests basic functionality without requiring live audio input
 """
 import json
 import os
+import tempfile
 
 def test_glossary_loading():
     """Test that glossary file can be loaded"""
@@ -67,7 +68,7 @@ def test_history_manager():
         from history_manager import HistoryManager
         
         # Create test directory
-        test_dir = "/tmp/test_history"
+        test_dir = os.path.join(tempfile.gettempdir(), "test_history")
         hm = HistoryManager(history_dir=test_dir)
         print("✓ History manager initialized")
         

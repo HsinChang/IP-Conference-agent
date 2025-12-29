@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog
 import json
 import os
+import tempfile
 import threading
 from datetime import datetime
 
@@ -186,7 +187,8 @@ class ConferenceAgentGUI:
         
         # Save audio to temporary file
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.current_audio_file = f"/tmp/recording_{timestamp}.wav"
+        temp_dir = tempfile.gettempdir()
+        self.current_audio_file = os.path.join(temp_dir, f"recording_{timestamp}.wav")
         self.audio_recorder.save_recording(self.current_audio_file)
         
         # Stop speech recognition
