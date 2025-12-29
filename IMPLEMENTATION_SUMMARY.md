@@ -21,7 +21,9 @@ A complete meeting transcription and summary application designed specifically f
    - Language indicator in UI
 
 3. **Chinese Translation**
-   - Real-time translation using Google Translate
+   - Real-time translation with multi-provider fallback
+   - Primary: OpenAI translation (works globally including China)
+   - Automatic fallback to MyMemory or Google Translate
    - Custom IP glossary integration
    - 13 pre-configured IP terms (expandable)
    - Glossary terms preserved during translation
@@ -105,8 +107,11 @@ IP-Conference-agent/
 
 #### External APIs
 - **Google Speech-to-Text API**: Speech recognition (via SpeechRecognition library)
-- **Google Translate API**: Translation (via deep-translator library)
-- **OpenAI GPT API**: AI summarization
+- **Translation APIs**: Multi-provider with automatic fallback
+  - Primary: OpenAI GPT API (works globally including China)
+  - Fallback: MyMemory Translator (works in China)
+  - Fallback: Google Translate API (may not work in China)
+- **OpenAI GPT API**: AI summarization and translation
 
 #### Python Libraries
 - `SpeechRecognition` - Speech-to-text

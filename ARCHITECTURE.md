@@ -148,10 +148,13 @@
 
 ### translator.py (Translator)
 - **Purpose**: Text translation with glossary
-- **Dependencies**: deep-translator
+- **Dependencies**: deep-translator, openai
 - **Key Functions**:
-  - Google Translate API
-  - Glossary term replacement
+  - Multi-provider translation with automatic fallback
+  - **Primary**: OpenAI translation (works globally including China)
+  - **Fallback 1**: MyMemory Translator (free, works in China)
+  - **Fallback 2**: Google Translate (may not work in China)
+  - Glossary term replacement (case-insensitive)
   - Batch translation
   - Custom term handling
 
@@ -207,17 +210,28 @@
    - Supports multiple languages
    - Used by: SpeechRecognizer
 
-2. **Google Translate API**
-   - Free tier available
-   - Requires internet
-   - Supports 100+ languages
-   - Used by: Translator
+2. **Translation Services (Multi-Provider with Fallback)**
+   - **Primary: OpenAI GPT API**
+     - Paid service (same API key as summary)
+     - Works globally including mainland China
+     - High quality translations
+     - Used by: Translator (primary)
+   - **Fallback 1: MyMemory Translator**
+     - Free tier available
+     - Works in mainland China
+     - Requires internet
+     - Used by: Translator (fallback)
+   - **Fallback 2: Google Translate API**
+     - Free tier available
+     - May not work in mainland China
+     - Supports 100+ languages
+     - Used by: Translator (fallback)
 
 3. **OpenAI GPT API**
    - Paid service
    - Requires API key
    - GPT-3.5-turbo recommended
-   - Used by: SummaryGenerator
+   - Used by: SummaryGenerator and Translator
 
 ## File Storage Structure
 

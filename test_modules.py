@@ -46,9 +46,10 @@ def test_translator_import():
         
         # Test with glossary
         translator = Translator(glossary_file='ip_glossary.json')
-        print(f"✓ Translator initialized with glossary")
+        print(f"✓ Translator initialized with fallback providers")
+        print(f"  Available providers: {[name for name, _ in translator.translators]}")
         
-        # Test translation (this will use Google Translate API)
+        # Test translation
         test_text = "intellectual property"
         try:
             result = translator.translate(test_text)

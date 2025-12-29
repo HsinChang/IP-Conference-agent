@@ -35,7 +35,8 @@ class ConferenceAgentGUI:
         )
         self.translator = Translator(
             glossary_file=self.config.get("glossary_file"),
-            target_language=self.config.get("translation_target", "zh-CN")
+            target_language=self.config.get("translation_target", "zh-CN"),
+            openai_api_key=self.config.get("openai_api_key")
         )
         self.summary_generator = SummaryGenerator(
             api_key=self.config.get("openai_api_key")

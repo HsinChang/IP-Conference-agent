@@ -18,7 +18,7 @@ A locally-run meeting transcription and summary application with real-time langu
 
 - Python 3.8 or higher
 - Microphone for audio input
-- OpenAI API key (for summary generation)
+- OpenAI API key (for translation and summary generation)
 - Internet connection (for speech recognition and translation services)
 
 ## Installation
@@ -159,6 +159,12 @@ IP-Conference-agent/
 - Speak clearly and at a moderate pace
 - Ensure background noise is minimal
 
+### Translation not working in China
+- The application uses OpenAI as the primary translation service (works in China)
+- If OpenAI translation fails, it automatically falls back to MyMemory Translator
+- Ensure your OpenAI API key is properly configured
+- Check internet connection is stable
+
 ### Summary generation fails
 - Verify OpenAI API key is correctly configured
 - Check API key has sufficient credits
@@ -170,9 +176,12 @@ IP-Conference-agent/
 
 ## API Keys and Privacy
 
-- OpenAI API key is required for summary generation
+- OpenAI API key is required for translation and summary generation
 - Speech recognition uses Google Speech API (free)
-- Translation uses Google Translate (free)
+- Translation uses multiple providers for global accessibility:
+  - **Primary**: OpenAI translation (works in mainland China and overseas)
+  - **Fallback**: MyMemory Translator (free, works in China)
+  - **Fallback**: Google Translate (may not work in mainland China)
 - All recordings are stored locally on your machine
 - No data is retained on external servers beyond API calls
 
