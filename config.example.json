@@ -1,0 +1,11 @@
+{
+    "openai_api_key": "your-api-key-here",
+    "recognized_languages": ["en-US", "fr-FR"],
+    "translation_target": "zh-CN",
+    "summary_language": "zh-CN",
+    "glossary_file": "ip_glossary.json",
+    "history_dir": "recordings_history",
+    "audio_format": "wav",
+    "sample_rate": 16000,
+    "chunk_duration": 5
+}
