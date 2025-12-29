@@ -29,21 +29,28 @@ class Translator:
         
         # Set up OpenAI for translation (works globally including China)
         self.openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
+        self.openai_client = None
         if self.openai_api_key and OPENAI_AVAILABLE:
-            openai.api_key = self.openai_api_key
+            try:
+                self.openai_client = openai.OpenAI(api_key=self.openai_api_key)
+            except Exception as e:
+                print(f"OpenAI client initialization failed: {e}")
+        
+        # Map target language codes to language names for prompts
+        self.target_language_name = self._get_language_name(target_language)
         
         # Initialize multiple translation backends for fallback
         self.translators = []
         
         # Primary: OpenAI (works globally, most reliable)
-        if self.openai_api_key and OPENAI_AVAILABLE:
+        if self.openai_client:
             self.translators.append(('openai', None))
             print("Translator: OpenAI enabled (primary)")
         
         # Fallback 1: MyMemory Translator (free, works in China)
         if DEEP_TRANSLATOR_AVAILABLE:
             try:
-                self.translators.append(('mymemory', MyMemoryTranslator(source='auto', target='zh-CN')))
+                self.translators.append(('mymemory', MyMemoryTranslator(source='auto', target=self.target_language)))
                 print("Translator: MyMemory enabled (fallback)")
             except Exception as e:
                 print(f"MyMemory translator initialization failed: {e}")
@@ -51,13 +58,28 @@ class Translator:
         # Fallback 2: Google Translate (may not work in China)
         if DEEP_TRANSLATOR_AVAILABLE:
             try:
-                self.translators.append(('google', GoogleTranslator(source='auto', target=target_language)))
+                self.translators.append(('google', GoogleTranslator(source='auto', target=self.target_language)))
                 print("Translator: Google Translate enabled (fallback)")
             except Exception as e:
                 print(f"Google translator initialization failed: {e}")
         
         if not self.translators:
             print("Warning: No translation services available. Install dependencies or provide OpenAI API key.")
+    
+    def _get_language_name(self, language_code):
+        """Map language code to full language name for prompts"""
+        language_map = {
+            'zh-CN': 'Simplified Chinese',
+            'zh-TW': 'Traditional Chinese',
+            'zh': 'Chinese',
+            'en': 'English',
+            'es': 'Spanish',
+            'fr': 'French',
+            'de': 'German',
+            'ja': 'Japanese',
+            'ko': 'Korean',
+        }
+        return language_map.get(language_code, language_code)
         
     def load_glossary(self, glossary_file):
         """Load custom glossary from JSON file"""
@@ -87,14 +109,14 @@ class Translator:
         
     def _translate_with_openai(self, text):
         """Translate using OpenAI API (works globally including China)"""
-        if not self.openai_api_key or not OPENAI_AVAILABLE:
+        if not self.openai_client:
             return None
             
         try:
-            response = openai.chat.completions.create(
+            response = self.openai_client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a professional translator. Translate the following text to Simplified Chinese. Only provide the translation, no explanations."},
+                    {"role": "system", "content": f"You are a professional translator. Translate the following text to {self.target_language_name}. Only provide the translation, no explanations."},
                     {"role": "user", "content": text}
                 ],
                 max_tokens=1000,
